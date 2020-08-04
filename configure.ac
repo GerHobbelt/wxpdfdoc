@@ -138,6 +138,8 @@ WX_LIKE_LIBNAME([WXPDFDOC_LIBNAME], [wxcode], [pdfdoc])
 AC_SUBST(WXPDFDOC_LIBNAME)
 AC_SUBST(WX_LIBS_PDFDC_SAMPLE)
 
+if test -n "$BUILD_SAMPLES"; then
+
 dnl Ensure that the samples can find the files they need when running from the
 dnl build directory.
 AC_CONFIG_LINKS([samples/pdfdc/smile.jpg:samples/pdfdc/smile.jpg
@@ -176,6 +178,8 @@ AC_CONFIG_LINKS([samples/pdfdc/smile.jpg:samples/pdfdc/smile.jpg
     samples/minimal/indic-tamil.txt:samples/minimal/indic-tamil.txt
     samples/minimal/indic-telugu.txt:samples/minimal/indic-telugu.txt
 ])
+
+fi
 
 AC_CONFIG_FILES([Makefile wxpdfdoc.pc])
 AC_OUTPUT
