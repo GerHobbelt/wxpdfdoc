@@ -42,6 +42,8 @@ AC_ARG_ENABLE(utilities,
              [BUILD_UTILITIES=1])
 AM_CONDITIONAL([BUILD_UTILITIES], [test -n "$BUILD_UTILITIES"])
 
+LT_INIT([win32-dll])
+
 dnl Allow adding MSW-specific fragments to the makefile.
 case "${host}" in
     *-*-cygwin* )
@@ -58,7 +60,6 @@ if test -n "$USE_MSW"; then
     AC_CHECK_TOOL([WINDRES], [windres], no)
 fi
 
-LT_INIT([win32-dll])
 AM_CONDITIONAL([USE_SHARED], [test "x$enable_shared" = xyes])
 
 AC_PROG_CXX
