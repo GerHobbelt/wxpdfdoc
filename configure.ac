@@ -53,6 +53,10 @@ case "${host}" in
     *-*-mingw32* )
         USE_MSW=1
         ;;
+
+    *-*-mingw64* )
+        USE_MSW=1
+        ;;
 esac
 AM_CONDITIONAL(USE_MSW, [test -n "$USE_MSW"])
 
