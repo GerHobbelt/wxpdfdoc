@@ -71,10 +71,13 @@ AC_LANG(C++)
 
 AC_ARG_VAR(WX_CONFIG, [Path to wx-config script (default: search in PATH).])
 WX_CONFIG_OPTIONS
+WX_STANDARD_OPTIONS([toolkit])
+WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
 WX_CONFIG_CHECK([2.8.0],
     [],
     [AC_MSG_FAILURE([wxWidgets required but not detected.])],
-    [base,core,xml]
+    [base,core,xml],
+    [$WXCONFIG_FLAGS]
 )
 
 if test -n "$BUILD_SAMPLES"; then
@@ -88,7 +91,8 @@ core_WX_LIBS=$WX_LIBS
 WX_CONFIG_CHECK([2.8.0],
     [WX_LIBS_PDFDC_SAMPLE=$WX_LIBS],
     [AC_MSG_WARN([Some wxWidgets libraries not available, pdfdc sample won't be built])],
-    [adv,base,core,html,richtext,xml]
+    [adv,base,core,html,richtext,xml],
+    [$WXCONFIG_FLAGS]
 )
 WX_LIBS=$core_WX_LIBS
 
