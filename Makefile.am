@@ -259,6 +259,7 @@ lib@WXPDFDOC_LIBNAME@_la_SOURCES = \
     src/pdfgc.cpp \
     src/pdfgradient.cpp \
     src/pdfgraphics.cpp \
+    src/pdfgridctrl.cpp \
     src/pdfimage.cpp \
     src/pdfkernel.cpp \
     src/pdflayer.cpp \
@@ -323,6 +324,7 @@ includewx_HEADERS = \
     include/wx/pdfgc.h \
     include/wx/pdfgradient.h \
     include/wx/pdfgraphics.h \
+    include/wx/pdfgridctrl.h \
     include/wx/pdfimage.h \
     include/wx/pdfinfo.h \
     include/wx/pdflayer.h \
@@ -384,12 +386,8 @@ if BUILD_SAMPLES
 # Samples (don't need to be installed).
 noinst_PROGRAMS += samples/minimal/minimal
 
-if BUILD_PDFDC_SAMPLE
-noinst_PROGRAMS += samples/pdfdc/pdfdc
-endif
-
-if BUILD_PDFGC_SAMPLE
-noinst_PROGRAMS += samples/pdfgc/pdfgc
+if BUILD_PDFGUI_SAMPLES
+noinst_PROGRAMS += samples/pdfdc/pdfdc samples/pdfgc/pdfgc samples/listctrl/listctrl samples/gridctrl/gridctrl
 endif
 
 samples_minimal_minimal_SOURCES = \
@@ -435,11 +433,13 @@ else
 samples_minimal_minimal_LDFLAGS = -no-install
 endif
 
+if BUILD_PDFGUI_SAMPLES
+
 samples_pdfdc_pdfdc_SOURCES = \
     samples/pdfdc/printing.cpp \
     samples/pdfdc/printing.h
 
-samples_pdfdc_pdfdc_LDADD = $(WX_LIBS_PDFDC_SAMPLE) $(LDADD)
+samples_pdfdc_pdfdc_LDADD = $(WX_LIBS_PDFGUI_SAMPLES) $(LDADD)
 
 if USE_MSW
 samples_pdfdc_pdfdc_SOURCES += samples/pdfdc/printing.rc
@@ -453,7 +453,7 @@ samples_pdfgc_pdfgc_SOURCES = \
     samples/pdfgc/pdfgc.cpp \
     samples/pdfgc/pdfgc.h
 
-samples_pdfgc_pdfgc_LDADD = $(WX_LIBS_PDFGC_SAMPLE) $(LDADD)
+samples_pdfgc_pdfgc_LDADD = $(WX_LIBS_PDFGUI_SAMPLES) $(LDADD)
 
 if USE_MSW
 samples_pdfgc_pdfgc_SOURCES += samples/pdfgc/pdfgc.rc
@@ -461,6 +461,36 @@ samples_pdfgc_pdfgc_LDADD += samples/pdfgc/pdfgc.res_o
 CLEANFILES += samples/pdfgc/pdfgc.res_o
 else
 samples_pdfgc_pdfgc_LDFLAGS = -no-install
+endif
+
+samples_listctrl_listctrl_SOURCES = \
+    samples/listctrl/listctrlsample.cpp \
+    samples/listctrl/listctrlsample.h
+
+samples_listctrl_listctrl_LDADD = $(WX_LIBS_PDFGUI_SAMPLES) $(LDADD)
+
+if USE_MSW
+samples_listctrl_listctrl_SOURCES += samples/listctrl/listctrlsample.rc
+samples_listctrl_listctrl_LDADD += samples/listctrl/listctrlsample.res_o
+CLEANFILES += samples/listctrl/listctrlsample.res_o
+else
+samples_listctrl_listctrl_LDFLAGS = -no-install
+endif
+
+samples_gridctrl_gridctrl_SOURCES = \
+    samples/gridctrl/gridctrlsample.cpp \
+    samples/gridctrl/gridctrlsample.h
+
+samples_gridctrl_gridctrl_LDADD = $(WX_LIBS_PDFGUI_SAMPLES) $(LDADD)
+
+if USE_MSW
+samples_gridctrl_gridctrl_SOURCES += samples/gridctrl/gridctrlsample.rc
+samples_gridctrl_gridctrl_LDADD += samples/gridctrl/gridctrlsample.res_o
+CLEANFILES += samples/gridctrl/gridctrlsample.res_o
+else
+samples_gridctrl_gridctrl_LDFLAGS = -no-install
+endif
+
 endif
 
 endif
