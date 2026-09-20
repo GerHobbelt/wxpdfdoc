@@ -28,6 +28,8 @@ on the FPDF web site are incorporated into wxPdfDocument.
 - **Document Protection**: Support for document encryption (including AES-256) and permission management.
 - **Templates & Layers**: Import pages from existing PDF documents as templates and organize content with layers (Optional Content Groups).
 - **Markup & Tables**: Use a simple XML markup language for styled text and complex tables with multi-page support.
+- **wxListCtrl Export**: Export any `wxListCtrl` directly to PDF via `wxPdfDocument::AddList()` or `wxPdfDC::DrawList()`. Supports column headers repeated across pages, alternating row colours, per-item text/background colours, full-page-width layout, and a LaTeX *booktabs*-style rendering with horizontal rules only.
+- **wxGrid Export**: Export any `wxGrid` directly to PDF via `wxPdfDocument::AddGrid()` or `wxPdfDC::DrawGrid()`. Supports column and row headers repeated across pages, per-cell background and text colours from `wxGridCellAttr`, optional cell and header bitmaps via `wxPdfGridBitmapProvider`, row/column range exports, row label columns, alternating row colours, full-page-width layout, and a LaTeX *booktabs*-style rendering with horizontal rules only.
 - **Integration**: Includes `wxPdfDC` and `wxPdfGraphicsContext`, providing seamless integration with the wxWidgets `wxDC` and `wxGraphicsContext` APIs and the printing framework.
 - **Standards**: Support for PDF/A-1B conformance.
 
@@ -36,8 +38,18 @@ on the FPDF web site are incorporated into wxPdfDocument.
 
 ## Version information
 
-* 1.3.1 - *April 2025*
-  - Adjusted make files to properly handle white space in path names (issue #96)
+* 1.4.0 - *May 2026*
+  - Updated 3rd party libraries _zint_ and _woff2_
+  - Improved documentation
+  - Changed default encryption to AES-256 instead of RC4
+  - Applied various code improvements
+  - Added `wxPdfGraphicsContext` implementation (and sample application)
+  - Added support for granular font weights (Thin to ExtraHeavy)
+  - Added linear and radial shading patterns for drawing and filling
+  - Added font style and weight attributes to font description
+  - Fixed issue where bold fonts were not correctly selected when using `wxFont` with `wxFONTWEIGHT_BOLD`
+  - Fixed various compile time warnings
+  - Fixed several long-standing bugs
 
 For further version information please consult the [CHANGELOG](CHANGELOG.md).
  

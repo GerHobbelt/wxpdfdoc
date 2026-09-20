@@ -21,6 +21,9 @@
 #   - pdfgc    — GUI sample demonstrating wxPdfGraphicsContext.
 #                A single drawing routine renders the same scene to the
 #                on-screen canvas, a saved PDF, and the system printer.
+#   - gridctrl — GUI sample demonstrating wxPdfDocument::AddGrid() and
+#                wxPdfDC::DrawGrid() for exporting a wxGrid to PDF.
+#                Requires wx::adv (which provides wxGrid).
 #
 # Each executable is emitted into its own "samples/<name>/" folder so the
 # relative paths (data files, ../../lib/fonts, etc.) resolve correctly.
@@ -194,4 +197,46 @@ set_target_properties(pdfgc PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${WXPDFDOC_ROOT}/samples/pdfgc"
     RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL     "${WXPDFDOC_ROOT}/samples/pdfgc"
     VS_DEBUGGER_WORKING_DIRECTORY           "${WXPDFDOC_ROOT}/samples/pdfgc"
+)
+
+# ---------------------------------------------------------------------------
+# listctrl sample executable (wxListCtrl export demo)
+# ---------------------------------------------------------------------------
+file(GLOB LISTCTRL_SRCS CONFIGURE_DEPENDS ${WXPDFDOC_ROOT}/samples/listctrl/*.cpp)
+
+add_executable(listctrl WIN32 ${LISTCTRL_SRCS})
+if(WIN32)
+    target_sources(listctrl PRIVATE ${WXPDFDOC_ROOT}/samples/listctrl/listctrlsample.rc)
+endif()
+target_include_directories(listctrl PRIVATE ${WXPDFDOC_ROOT}/samples/listctrl)
+target_link_libraries(listctrl PRIVATE wxpdfdoc)
+
+set_target_properties(listctrl PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY                "${WXPDFDOC_ROOT}/samples/listctrl"
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG          "${WXPDFDOC_ROOT}/samples/listctrl"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE        "${WXPDFDOC_ROOT}/samples/listctrl"
+    RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${WXPDFDOC_ROOT}/samples/listctrl"
+    RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL     "${WXPDFDOC_ROOT}/samples/listctrl"
+    VS_DEBUGGER_WORKING_DIRECTORY           "${WXPDFDOC_ROOT}/samples/listctrl"
+)
+
+# ---------------------------------------------------------------------------
+# gridctrl sample executable (wxGrid export demo)
+# ---------------------------------------------------------------------------
+file(GLOB GRIDCTRL_SRCS CONFIGURE_DEPENDS ${WXPDFDOC_ROOT}/samples/gridctrl/*.cpp)
+
+add_executable(gridctrl WIN32 ${GRIDCTRL_SRCS})
+if(WIN32)
+    target_sources(gridctrl PRIVATE ${WXPDFDOC_ROOT}/samples/gridctrl/gridctrlsample.rc)
+endif()
+target_include_directories(gridctrl PRIVATE ${WXPDFDOC_ROOT}/samples/gridctrl)
+target_link_libraries(gridctrl PRIVATE wxpdfdoc wx::adv)
+
+set_target_properties(gridctrl PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY                "${WXPDFDOC_ROOT}/samples/gridctrl"
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG          "${WXPDFDOC_ROOT}/samples/gridctrl"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE        "${WXPDFDOC_ROOT}/samples/gridctrl"
+    RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${WXPDFDOC_ROOT}/samples/gridctrl"
+    RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL     "${WXPDFDOC_ROOT}/samples/gridctrl"
+    VS_DEBUGGER_WORKING_DIRECTORY           "${WXPDFDOC_ROOT}/samples/gridctrl"
 )

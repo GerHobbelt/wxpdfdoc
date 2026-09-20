@@ -12,10 +12,19 @@
 #ifndef _PDF_DC_H_
 #define _PDF_DC_H_
 
+#include <wx/defs.h>
 #include <wx/cmndata.h>
 #include <wx/dc.h>
 
 #include <stack>
+
+#if wxUSE_LISTCTRL
+class wxListCtrl;
+#endif
+
+#if wxUSE_GRID
+class wxGrid;
+#endif
 
 #include "wx/pdfdocument.h"
 #include "wx/pdffont.h"
@@ -135,6 +144,30 @@ public:
   * \see SetMapModeStyle()
   */
   wxPdfMapModeStyle GetMapModeStyle() const;
+
+#if wxUSE_LISTCTRL
+  /// Draws a list control's content at the given position
+  /**
+  * \param list Pointer to the list control
+  * \param x Abscissa of the top left corner
+  * \param y Ordinate of the top left corner
+  * \param options Export options
+  */
+  void DrawList(const wxListCtrl* list, wxCoord x, wxCoord y,
+                const wxPdfListCtrlOptions& options = wxPdfListCtrlOptions());
+#endif
+
+#if wxUSE_GRID
+  /// Draws a grid control's content at the given position
+  /**
+  * \param grid Pointer to the grid control
+  * \param x Abscissa of the top left corner
+  * \param y Ordinate of the top left corner
+  * \param options Export options
+  */
+  void DrawGrid(const wxGrid* grid, wxCoord x, wxCoord y,
+                const wxPdfGridOptions& options = wxPdfGridOptions());
+#endif
 
 private:
   wxDECLARE_DYNAMIC_CLASS(wxPdfDC);

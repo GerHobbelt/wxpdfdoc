@@ -7,6 +7,14 @@ and from version 0.9.0 onwards this project adheres to [Semantic Versioning](htt
 
 ## [Unreleased]
 
+### Added
+
+- Added export of any `wxListCtrl` directly to PDF via `wxPdfDocument::AddList()` or `wxPdfDC::DrawList()`
+- Added export of any `wxGrid` directly to PDF via `wxPdfDocument::AddGrid()` or `wxPdfDC::DrawGrid()`
+- Added VC++ 2026 build support
+
+## [1.4.0] - 2026-05-20
+
 ### Changed
 
 - Updated 3rd party libraries _zint_ and _woff2_
@@ -548,7 +556,8 @@ First public release
 
 - Planning and basic PDF features implemented
 
-[Unreleased]: ../../compare/v1.3.1...HEAD
+[Unreleased]: ../../compare/v1.4.0...HEAD
+[1.4.0]: ../../compare/v1.3.1...v1.4.0
 [1.3.1]: ../../compare/v1.3.0...v1.3.1
 [1.3.0]: ../../compare/v1.2.1...v1.3.0
 [1.2.1]: ../../compare/v1.2.0...v1.2.1
