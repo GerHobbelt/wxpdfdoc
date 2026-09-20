@@ -3,7 +3,7 @@
 ** Purpose:     Class for representation of a PDF document
 ** Author:      Ulrich Telle
 ** Created:     2005-08-04
-** Copyright:   (c) 2005-2024 Ulrich Telle
+** Copyright:   (c) 2005-2026 Ulrich Telle
 ** Licence:     wxWindows licence
 ** SPDX-License-Identifier: LGPL-3.0+ WITH WxWindows-exception-3.1
 */
@@ -15,6 +15,7 @@
 
 // wxWidgets headers
 #include <wx/dynarray.h>
+#include <wx/graphics.h>
 #include <wx/hashmap.h>
 #include <wx/mstream.h>
 #include <wx/string.h>
@@ -189,22 +190,24 @@ public:
   *                      If an owner password is set, the document can be opened
   *                      in privilege mode with no restriction if that password is entered
   * \param encryptionMethod selects the encryption method. Possible values are:
-  *   \li @c wxPDF_ENCRYPTION_RC4V1   RC4 method, version 1, with 40 bit encryption key (default)
+  *   \li @c wxPDF_ENCRYPTION_RC4V1   RC4 method, version 1, with 40 bit encryption key
   *   \li @c wxPDF_ENCRYPTION_RC4V2   RC4 method, version 2, with 40..128 bit encryption key
   *   \li @c wxPDF_ENCRYPTION_AESV2   AES method, with 128 bit encryption key
   *   \li @c wxPDF_ENCRYPTION_AESV3   AES method, with 256 bit encryption key
-  *   \li @c wxPDF_ENCRYPTION_AESV3R6 AES method, with 256 bit encryption key (PDF 2.0)
+  *   \li @c wxPDF_ENCRYPTION_AESV3R6 AES method, with 256 bit encryption key (PDF 2.0, default)
   * \param keyLength Length of the key used for encryption (default: 0)
-  *                  The default value selects the standard encryption method revision 2 with a key length of 40 bits.
-  *                  Specifying a value > 0 selects the standard encryption method revision 3 with the given key length,
-  *                  the key length has to be in the range 40..128 and has to be dividable by 8.
-  *                  The key length is adjusted accordingly if these conditions are not met.
+  *                  For encryption method @c wxPDF_ENCRYPTION_RC4V1 the key length is always 40 bits.
+  *                  For encryption method @c wxPDF_ENCRYPTION_RC4V2 the key length has to be in the range 40..128
+  *                  and has to be dividable by 8; values outside this range are clamped automatically.
+  *                  For encryption methods @c wxPDF_ENCRYPTION_AESV2 the key length is always 128 bits.
+  *                  For encryption methods @c wxPDF_ENCRYPTION_AESV3 and @c wxPDF_ENCRYPTION_AESV3R6
+  *                  the key length is always 256 bits.
   * \return @c true, if the provided passwords are valid, @c false otherwise.
   */
   virtual bool SetProtection(int permissions,
                              const wxString& userPassword = wxEmptyString,
                              const wxString& ownerPassword = wxEmptyString,
-                             wxPdfEncryptionMethod encryptionMethod = wxPDF_ENCRYPTION_RC4V1,
+                             wxPdfEncryptionMethod encryptionMethod = wxPDF_ENCRYPTION_AESV3R6,
                              int keyLength = 0);
 
   /// Set the image scale.
@@ -645,6 +648,134 @@ public:
   * \param fillColour the background colour to fill the pattern background (optional)
   */
   virtual bool AddPattern(const wxString& patternName, wxPdfPatternStyle patternStyle, double width, double height, const wxColour& drawColour, const wxColour& fillColour = wxColour());
+
+  /// Add a linear gradient pattern
+  /**
+  * Add a linear gradient pattern which can be referenced in draw or fill pattern methods
+  * 
+  * The pattern starts at (x1, y1) and ends at (x2, y2). The colours c1 and c2 are used
+  * as the start and end gradient colours.
+  * 
+  * \param patternName the name of the pattern (case sensitive)
+  * \param x1 the x coordinate of the start value
+  * \param y1 the y coordinate of the start value
+  * \param x2 the x coordinate of the end value
+  * \param y2 the y coordinate of the end value
+  * \param c1 the start colour
+  * \param c2 the end colour
+  * \param matrix an optional transformation matrix
+  */
+  virtual bool AddLinearGradientPattern(const wxString& patternName,
+                                        double x1, double y1, double x2, double y2,
+                                        const wxColour& c1, const wxColour& c2);
+  /// \overload
+  virtual bool AddLinearGradientPattern(const wxString& patternName,
+                                        double x1, double y1, double x2, double y2,
+                                        const wxColour& c1, const wxColour& c2,
+                                        const wxGraphicsMatrix& matrix);
+  /// \overload
+  virtual bool AddLinearGradientPattern(const wxString& patternName,
+                                        double x1, double y1, double x2, double y2,
+                                        const wxColour& c1, const wxColour& c2,
+                                        const wxAffineMatrix2D& matrix);
+
+  /// Add a linear gradient pattern
+  /**
+  * Add a linear gradient pattern which can be referenced in draw or fill pattern methods
+  * 
+  * The pattern starts at (x1, y1) and ends at (x2, y2). A full set of gradient stops
+  * can be specified. At least 2 stops are required.
+  *
+  * \param patternName the name of the pattern (case sensitive)
+  * \param x1 the x coordinate of the start value
+  * \param y1 the y coordinate of the start value
+  * \param x2 the x coordinate of the end value
+  * \param y2 the y coordinate of the end value
+  * \param stops a full set of gradient stops (at least 2)
+  * \param matrix an optional transformation matrix
+  */
+  virtual bool AddLinearGradientPattern(const wxString& patternName,
+                                        double x1, double y1, double x2, double y2,
+                                        const wxGraphicsGradientStops& stops);
+  /// \overload
+  virtual bool AddLinearGradientPattern(const wxString& patternName,
+                                        double x1, double y1, double x2, double y2,
+                                        const wxGraphicsGradientStops& stops,
+                                        const wxGraphicsMatrix& matrix);
+  /// \overload
+  virtual bool AddLinearGradientPattern(const wxString& patternName,
+                                        double x1, double y1, double x2, double y2,
+                                        const wxGraphicsGradientStops& stops,
+                                        const wxAffineMatrix2D& matrix);
+
+  /// Add a radial gradient pattern
+  /**
+  * Add a radial gradient pattern which can be referenced in draw or fill pattern methods
+  * 
+  * The pattern originates at (startX, startY) and ends on a circle around (endX, endY) with the given radius.
+  * The gradient is specified by its start and end colours, oColor and cColor.
+  * 
+  * \param patternName the name of the pattern (case sensitive)
+  * \param startX the x coordinate of the start value
+  * \param startY the y coordinate of the start value
+  * \param startRadius the radius at the start point
+  * \param endX the x coordinate of the end value
+  * \param endY the y coordinate of the end value
+  * \param endRadius the radius at the end point
+  * \param oColor the start colour
+  * \param cColor the end colour
+  * \param matrix an optional transformation matrix
+  */
+  virtual bool AddRadialGradientPattern(const wxString& patternName,
+                                        double startX, double startY, double startRadius,
+                                        double endX, double endY, double endRadius,
+                                        const wxColour& oColor, const wxColour& cColor);
+  /// \overload
+  virtual bool AddRadialGradientPattern(const wxString& patternName,
+                                        double startX, double startY, double startRadius,
+                                        double endX, double endY, double endRadius,
+                                        const wxColour& oColor, const wxColour& cColor,
+                                        const wxGraphicsMatrix& matrix);
+  /// \overload
+  virtual bool AddRadialGradientPattern(const wxString& patternName,
+                                        double startX, double startY, double startRadius,
+                                        double endX, double endY, double endRadius,
+                                        const wxColour& oColor, const wxColour& cColor,
+                                        const wxAffineMatrix2D& matrix);
+
+  /// Add a radial gradient pattern
+  /**
+  * Add a radial gradient pattern which can be referenced in draw or fill pattern methods
+  *
+  * The pattern originates at (startX, startY) and ends on a circle around (endX, endY) with the given radius.
+  * The gradient is specified by a full set of gradient stops.
+  *
+  * \param patternName the name of the pattern (case sensitive)
+  * \param startX the x coordinate of the start value
+  * \param startY the y coordinate of the start value
+  * \param startRadius the radius at the start point
+  * \param endX the x coordinate of the end value
+  * \param endY the y coordinate of the end value
+  * \param endRadius the radius at the end point
+  * \param stops a full set of gradient stops (at least 2)
+  * \param matrix an optional transformation matrix
+  */
+  virtual bool AddRadialGradientPattern(const wxString& patternName,
+                                        double startX, double startY, double startRadius,
+                                        double endX, double endY, double endRadius,
+                                        const wxGraphicsGradientStops& stops);
+  /// \overload
+  virtual bool AddRadialGradientPattern(const wxString& patternName,
+                                        double startX, double startY, double startRadius,
+                                        double endX, double endY, double endRadius,
+                                        const wxGraphicsGradientStops& stops,
+                                        const wxGraphicsMatrix& matrix);
+  /// \overload
+  virtual bool AddRadialGradientPattern(const wxString& patternName,
+                                        double startX, double startY, double startRadius,
+                                        double endX, double endY, double endRadius,
+                                        const wxGraphicsGradientStops& stops,
+                                        const wxAffineMatrix2D& matrix);
 
   /// Defines the colour used for all drawing operations.
   /**

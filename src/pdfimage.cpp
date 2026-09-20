@@ -608,6 +608,7 @@ wxPdfImage::ParseJPG(wxInputStream* imageStream)
       case M_EOI:
         isValid = false;
         ready = true;
+        break;
 
       default:
         {
@@ -803,7 +804,7 @@ wxPdfImage::ParseWMF(wxInputStream* imageStream)
   short dashArray[8];
   size_t lenDashArray;
   size_t i;
-  short j, k, px, py;
+  short j = 0, k = 0, px = 0, py = 0;
   GdiObject* obj = NULL;
   while (!imageStream->Eof() && !endRecord)
   {
@@ -1013,7 +1014,7 @@ wxPdfImage::ParseWMF(wxInputStream* imageStream)
           }
           short numpoints = coords[0];
 
-          for (k = numpoints; k > 0; k--)
+          for (k = numpoints; k > 0 && 2*k < (int) (size - 3); k--)
           {
             px = coords[2*k-1];
             py = coords[2*k];
@@ -1082,11 +1083,11 @@ wxPdfImage::ParseWMF(wxInputStream* imageStream)
 
           short adjustment = numpolygons;
 
-          for (j = 1; j <= numpolygons; j++)
+          for (j = 1; j <= numpolygons && j < (int) (size - 3); j++)
           {
             short numpoints = coords[j];
 
-            for (k = numpoints; k > 0; k--)
+            for (k = numpoints; k > 0 && 2*k + adjustment < (int) (size - 3); k--)
             {
               px = coords[2*k-1 + adjustment];
               py = coords[2*k   + adjustment];

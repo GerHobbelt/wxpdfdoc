@@ -3,7 +3,7 @@
 ** Purpose:     Defines and enumerations for various PDF properties
 ** Author:      Ulrich Telle
 ** Created:     2006-07-13
-** Copyright:   (c) 2006-2024 Ulrich Telle
+** Copyright:   (c) 2006-2026 Ulrich Telle
 ** Licence:     wxWindows licence
 ** SPDX-License-Identifier: LGPL-3.0+ WITH WxWindows-exception-3.1
 */
@@ -98,6 +98,23 @@ enum
                          wxPDF_FONTSTYLE_EXTRABOLD  |
                          wxPDF_FONTSTYLE_HEAVY      |
                          wxPDF_FONTSTYLE_EXTRAHEAVY ///< Full font style mask
+};
+
+/// Font weights
+enum wxPdfFontWeight
+{
+  wxPDF_FONTWEIGHT_INVALID    =    0,
+  wxPDF_FONTWEIGHT_THIN       =  100, ///< Thin font weight
+  wxPDF_FONTWEIGHT_EXTRALIGHT =  200, ///< Extra light font weight
+  wxPDF_FONTWEIGHT_LIGHT      =  300, ///< Light font weight
+  wxPDF_FONTWEIGHT_REGULAR    =  400, ///< Regular font weight
+  wxPDF_FONTWEIGHT_MEDIUM     =  500, ///< Medium font weight
+  wxPDF_FONTWEIGHT_SEMIBOLD   =  600, ///< Semi-bold font weight
+  wxPDF_FONTWEIGHT_BOLD       =  700, ///< Extra bold font weight
+  wxPDF_FONTWEIGHT_EXTRABOLD  =  800, ///< Heavy font weight
+  wxPDF_FONTWEIGHT_HEAVY      =  900, ///< Heavy font weight
+  wxPDF_FONTWEIGHT_EXTRAHEAVY = 1000, ///< Extra heavy font weight
+  wxPDF_FONTWEIGHT_MAX        = wxPDF_FONTWEIGHT_EXTRAHEAVY
 };
 
 /// Permission options
@@ -222,6 +239,9 @@ enum wxPdfPatternStyle
   wxPDF_PATTERNSTYLE_NONE,     ///< No pattern
   wxPDF_PATTERNSTYLE_IMAGE,    ///< Image pattern
   wxPDF_PATTERNSTYLE_TEMPLATE, ///< Template pattern
+  wxPDF_PATTERNSTYLE_LINEAR_GRADIENT, ///< Linear gradient pattern
+  wxPDF_PATTERNSTYLE_RADIAL_GRADIENT, ///< Radial gradient pattern
+
   // Hatch styles
   wxPDF_PATTERNSTYLE_FIRST_HATCH,                                     ///< First available hatch style
   wxPDF_PATTERNSTYLE_BDIAGONAL_HATCH = wxPDF_PATTERNSTYLE_FIRST_HATCH, ///< Backward diagonal hatch
